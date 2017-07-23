@@ -30,6 +30,7 @@ int scrNow = 0;
 int clockState = NoTurn;
 int preClockState = NoTurn;
 
+// Tまでに, CW または CCW の入力があったか
 bool CWScratchedFlg = false;
 bool CCWScratchedFlg = false;
 
@@ -80,22 +81,23 @@ void loop() {
 
   if (clockState != NoTurn && clockState != CWEnd && clockState != CCWEnd)
   {
-    // CCW中にCW入力
+    // CCW中にCW入力, ターンテーブルが逆回転したらキーボード入力したい
     if (CWScratchedFlg && ((preClockState == CCWStart) || (preClockState == CCWContinue)))
     {
       GetClockState();
       PushOrReleaseScr();
-      //ResetClockCnt();
     }
-    // CW中にCCW入力
+    // CW中にCCW入力, ターンテーブルが逆回転したらキーボード入力したい
     else if (CCWScratchedFlg && ((preClockState == CWStart) || (preClockState == CWContinue)))
     {
       GetClockState();
       PushOrReleaseScr();
-      //ResetClockCnt();
     }
     else if (t > T)
     {
+      // 2回に分けて同じ向きにターンテーブルが回転したとき, 
+      // T以上の時間が空いていれば2回分の入力として判定したい
+
       // ScratchedFlg と preClockState から clockState を求める
       // ただしこれは一定の周期(clock)を満たしたときのみ行われる処理
       GetClockState();
@@ -110,12 +112,7 @@ void loop() {
     else
     {
       ++t;
-
-      //CWScratchedFlg = false;
-      //CCWScratchedFlg = false;
-
       scrPre = scrNow;
-
       NKROKeyboard.send();
 
       return;
