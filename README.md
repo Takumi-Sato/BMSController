@@ -1,2 +1,2 @@
 # BMSController
-BMSコントローラー製作で使ったArduinoスケッチ
+BMSコントローラー製作用に書いたArduinoスケッチ
